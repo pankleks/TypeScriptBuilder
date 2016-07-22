@@ -7,8 +7,17 @@ Install by nuget:
 Install-Package TypeScriptBuilder
 ```
 
-## Usage
+## Supported features
+- Resolving type dependency
+- Generics
+- Type inheritance
+- Enums
+- Nullable types
+- Dictionary converison (to strong type TS indexed objects)
+- Excluding types
+- `any` for types that can't be converted
 
+## Usage / Samples
 ```cs
 var
     ts = new TypeScriptGenerator();
@@ -19,7 +28,6 @@ ts.AddCSType(typeof(User));
 // write to file
 File.WriteAllText("Test.ts", ts.ToString());
 ```
-
 Sample C# class:
 ```cs
 class User 
@@ -31,7 +39,6 @@ class User
   public bool Active;
 }
 ```
-
 Output TypeScript:
 ```ts
 export interface User
@@ -40,15 +47,6 @@ export interface User
   Login: string;
 }
 ```
-
-## Supported features
-- Generics
-- Type inheritance
-- Enums
-- Nullable types
-- Dictionary converison (to strong type TS indexed objects)
-- Excluding types
-- `any` for types that can't be converted
 
 ## Dictionary
 
