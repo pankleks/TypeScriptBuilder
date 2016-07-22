@@ -45,6 +45,7 @@ export interface User
 - Generics
 - Type inheritance
 - Enums
+- Nullable types
 - Dictionary converison (to strong type TS indexed objects)
 - Excluding types
 - `any` for types that can't be converted
