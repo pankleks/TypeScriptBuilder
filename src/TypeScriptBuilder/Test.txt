@@ -1,4 +1,4 @@
-// generated at 7/22/2016 6:41:57 PM (UTC)
+// generated at 7/22/2016 6:56:38 PM (UTC)
 
 export interface Employee extends Entity<number>
 {
@@ -6,7 +6,7 @@ export interface Employee extends Entity<number>
 	EmployeeType?: EmployeeType;
 	ArrayTest: string[];
 	ListTest: Date[];
-	LastIPs: { [index: number]: string };
+	LastIPs: {};
 	CollectionTest: Entity<Date>[];
 	Skip: Skip;
 }

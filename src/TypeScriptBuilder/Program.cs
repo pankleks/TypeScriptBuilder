@@ -13,7 +13,7 @@ namespace TypeScriptBuilder
             var
                 builder = new TypeScriptBuilder();
             
-            builder.ToDefine(typeof(Employee));
+            builder.AddCSType(typeof(Employee));
 
             File.WriteAllText("Test.txt", builder.ToString());
         }

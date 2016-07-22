@@ -8,17 +8,24 @@ namespace TypeScriptBuilder
 {
     public class TypeScriptBuilder
     {
-        HashSet<Type> _defined = new HashSet<Type>();
-        Stack<Type> _toDefine = new Stack<Type>();
-        CodeTextBuilder _builder = new CodeTextBuilder();
+        readonly HashSet<Type> 
+            _defined = new HashSet<Type>();
+        readonly Stack<Type> 
+            _toDefine = new Stack<Type>();
+        readonly CodeTextBuilder 
+            _builder = new CodeTextBuilder();
+        readonly HashSet<Type>
+            _exclude;
 
-        public TypeScriptBuilder()
+        public TypeScriptBuilder(params Type[] excludeTypes)
         {
+            _exclude = new HashSet<Type>(excludeTypes);
+
             _builder.AppendLine($"// generated at {DateTime.UtcNow} (UTC)");
             _builder.AppendLine();
         }
 
-        public void ToDefine(Type type)
+        public void AddCSType(Type type)
         {
             if (_defined.Add(type))
                 _toDefine.Push(type);
@@ -45,7 +52,7 @@ namespace TypeScriptBuilder
                 case TypeCode.Int64:
                     if (ti.IsEnum)
                     {
-                        ToDefine(type);
+                        AddCSType(type);
                         return type.Name;
                     }
 
@@ -73,28 +80,24 @@ namespace TypeScriptBuilder
                         var
                             generics = ti.GetGenericArguments();
 
-
-                        //if (genericType == typeof(List<>))
-                        //    return TypeName(generics[0]) + "[]";
-
                         if (genericType == typeof(Dictionary<,>))
                         {
                             if (generics[0] != typeof(int) && generics[0] != typeof(string))
-                                throw new NotSupportedException($"int or string expected as dictionary key, type {type.FullName}");
+                                return $"{{ [index: {TypeName(generics[0])}]: {TypeName(generics[1])} }}";
 
-                            return $"{{ [index: {TypeName(generics[0])}]: {TypeName(generics[1])} }}";
+                            return "{}";
                         }
 
                         // any other enumerable
                         if (genericType.GetInterfaces().Any(e => e.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
                             return TypeName(generics[0]) + "[]";
 
-                        ToDefine(genericType);
+                        AddCSType(genericType);
 
                         return $"{WithoutGeneric(genericType)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
                     }
 
-                    ToDefine(type);
+                    AddCSType(type);
 
                     return type.Name;
                 default:
@@ -107,7 +110,7 @@ namespace TypeScriptBuilder
             var
                 ti = type.GetTypeInfo();
 
-            if (ti.GetCustomAttribute<TSExclude>() != null)
+            if (ti.GetCustomAttribute<TSExclude>() != null || _exclude.Contains(type))
                 return;
 
             if (ti.IsEnum)
