@@ -75,4 +75,6 @@ export interface Test {
 - `TSExclude` - skips generation of type or field
 - `TSAny` - skips type analizes, emits `any` instead
 
+You can also pass types to exclude to `TypeScriptGenerator` constructor.
+
 To learn more run `Test` project in the solution.
