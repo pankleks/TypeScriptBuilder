@@ -49,3 +49,28 @@ export interface User
 - Dictionary converison (to strong type TS indexed objects)
 - Excluding types
 - `any` for types that can't be converted
+
+## Dictionary
+
+Dictionaries with keys of type `int` or `string` will be translated to strong typed TS indexed objects:
+```cs
+class Entity<T>
+{
+    public T Value;
+}
+class Test 
+{
+    public Dictionary<int, Entity<DateTime>> Repo;
+}
+```
+```ts
+export interface Entity<T> {
+    Value: T;
+}
+export interface Test {
+    Repo: { [index: number]: Entity<Date> };
+}
+
+```
+
+To learn more run `Test` project in the solution.
