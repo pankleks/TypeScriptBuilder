@@ -1,11 +1,13 @@
-// generated at 7/22/2016 6:24:42 PM (UTC)
+// generated at 7/22/2016 6:41:57 PM (UTC)
 
 export interface Employee extends Entity<number>
 {
 	Login: string;
 	EmployeeType?: EmployeeType;
-	LastAccessTimes: Date[];
+	ArrayTest: string[];
+	ListTest: Date[];
 	LastIPs: { [index: number]: string };
+	CollectionTest: Entity<Date>[];
 	Skip: Skip;
 }
 

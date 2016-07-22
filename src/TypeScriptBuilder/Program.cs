@@ -50,9 +50,12 @@ namespace TypeScriptBuilder
         public string Login;
         public EmployeeType? EmployeeType;
 
-        public List<DateTime> LastAccessTimes;
+        public string[] ArrayTest;
+        public List<DateTime> ListTest;
 
         public Dictionary<int, string> LastIPs;
+
+        public ICollection<Entity<DateTime>> CollectionTest;
 
         // exclude
         public Skip Skip;

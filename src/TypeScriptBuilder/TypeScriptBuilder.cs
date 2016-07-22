@@ -61,7 +61,8 @@ namespace TypeScriptBuilder
                     return "Date";
                 case TypeCode.Object:
                     if (type.IsArray)
-                        return TypeName(type) + "[]";
+                        return TypeName(type.GetElementType()) + "[]";
+
                     if (type == typeof(object))
                         return "Object";
 
@@ -72,8 +73,9 @@ namespace TypeScriptBuilder
                         var
                             generics = ti.GetGenericArguments();
 
-                        if (genericType == typeof(List<>))
-                            return TypeName(generics[0]) + "[]";
+
+                        //if (genericType == typeof(List<>))
+                        //    return TypeName(generics[0]) + "[]";
 
                         if (genericType == typeof(Dictionary<,>))
                         {
@@ -82,6 +84,10 @@ namespace TypeScriptBuilder
 
                             return $"{{ [index: {TypeName(generics[0])}]: {TypeName(generics[1])} }}";
                         }
+
+                        // any other enumerable
+                        if (genericType.GetInterfaces().Any(e => e.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+                            return TypeName(generics[0]) + "[]";
 
                         ToDefine(genericType);
 
@@ -95,7 +101,8 @@ namespace TypeScriptBuilder
                     return "any";
             }
         }
-        public void DefineType(Type type)
+
+        void GenerateTypeDefinition(Type type)
         {
             var
                 ti = type.GetTypeInfo();
@@ -172,16 +179,17 @@ namespace TypeScriptBuilder
         public override string ToString()
         {
             while (_toDefine.Count > 0)
-                DefineType(_toDefine.Pop());
+                GenerateTypeDefinition(_toDefine.Pop());
 
             return _builder.ToString();
         }
     }
-
+    
     public class TSExclude : Attribute
     {
     }
 
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class TSAny : Attribute
     {
     }
