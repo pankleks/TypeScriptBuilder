@@ -1,6 +1,6 @@
 # TypeScriptBuilder
 
-Small library to generate TypeScript type definition based on C# types.
+This small library translates TypeScript type definition based on C# types.
 
 Install by nuget:
 ```
