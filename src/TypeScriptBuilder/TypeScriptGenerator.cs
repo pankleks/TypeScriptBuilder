@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Planck.Tools.TypeScript
+namespace TypeScriptBuilder
 {
-    public class TypeScriptBuilder
+    public class TypeScriptGenerator
     {
         readonly HashSet<Type> 
             _defined = new HashSet<Type>();
@@ -16,7 +16,7 @@ namespace Planck.Tools.TypeScript
         readonly HashSet<Type>
             _exclude;
 
-        public TypeScriptBuilder(params Type[] excludeTypes)
+        public TypeScriptGenerator(params Type[] excludeTypes)
         {
             _exclude = new HashSet<Type>(excludeTypes);
         }

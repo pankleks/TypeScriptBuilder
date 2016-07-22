@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Planck.Tools
+namespace TypeScriptBuilder
 {
     public class CodeTextBuilder
     {

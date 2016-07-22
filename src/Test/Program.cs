@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Planck.Tools.TypeScript;
+using TypeScriptBuilder;
 
-namespace TypeScriptBuilder
+namespace Test
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var
-                builder = new Planck.Tools.TypeScript.TypeScriptBuilder();
-            
+                builder = new TypeScriptGenerator();
+
             builder.AddCSType(typeof(Employee));
             builder.AddCSType(typeof(Strange<>));
 
             File.WriteAllText("Test.txt", builder.ToString());
         }
     }
-
 
     public enum EmployeeType
     {

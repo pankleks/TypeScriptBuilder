@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>de0c2194-034b-4afc-9958-2cd4bd6bf7f5</ProjectGuid>
-    <RootNamespace>Planck.Tools</RootNamespace>
+    <ProjectGuid>640622de-c6d6-4877-b946-9c9a8ef13245</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

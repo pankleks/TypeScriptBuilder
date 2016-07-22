@@ -1,20 +1,29 @@
 ﻿{
-  "version": "1.0.0-*",
-  "buildOptions": {
-    "emitEntryPoint": true
+  "version": "0.1.0",
+  "title": "TypeScript builder",
+  "description": "Generates TypeScript type definition based on C# types",
+  "authors": [ "Krzysztof Heim" ],
+  "packOptions": {
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/pankleks/TypeScriptBuilder"
+    }
   },
 
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.0"
-    },
-    "Planck.Tools": "1.0.0-*"
+    "NETStandard.Library": "1.6.0",
+    "System.Reflection.TypeExtensions": "4.1.0"
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netstandard1.6": {
       "imports": "dnxcore50"
     }
+  },
+
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }

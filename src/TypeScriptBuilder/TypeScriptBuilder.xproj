@@ -7,7 +7,7 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>34eba2aa-c888-41e0-8885-362562fc5c99</ProjectGuid>
+    <ProjectGuid>bb258769-d1d0-494e-92d3-943d4da4edb1</ProjectGuid>
     <RootNamespace>TypeScriptBuilder</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>

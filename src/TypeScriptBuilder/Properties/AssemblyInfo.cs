@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DASSAULT SYSTEMES")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TypeScriptBuilder")]
 [assembly: AssemblyTrademark("")]
 
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("34eba2aa-c888-41e0-8885-362562fc5c99")]
+[assembly: Guid("bb258769-d1d0-494e-92d3-943d4da4edb1")]
