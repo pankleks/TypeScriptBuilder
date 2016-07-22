@@ -73,4 +73,8 @@ export interface Test {
 
 ```
 
+## Control attributes
+- `TSExclude` - skips generation of type or field
+- `TSAny` - skips type analizes, emits `any` instead
+
 To learn more run `Test` project in the solution.
