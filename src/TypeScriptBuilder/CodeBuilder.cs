@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
-namespace TypeScriptBuilder
+namespace Planck.Tools
 {
     public class CodeTextBuilder
     {
@@ -57,8 +58,16 @@ namespace TypeScriptBuilder
 
         public void AppendLine(string text = "")
         {
-            EmitIdent();
-            _builder.AppendLine(text);
+            string
+                temp;
+
+            using (var reader = new StringReader(text))
+                while ((temp = reader.ReadLine()) != null)
+                {
+                    EmitIdent();
+                    _builder.AppendLine(temp);
+                }
+
             _closeLine = false;
         }
 
@@ -67,6 +76,7 @@ namespace TypeScriptBuilder
             _builder.Append(text);
             _closeLine = true;
         }
+
 
         public override string ToString()
         {

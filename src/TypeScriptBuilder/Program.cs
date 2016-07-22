@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Planck.Tools.TypeScript;
 
 namespace TypeScriptBuilder
 {
@@ -11,9 +12,10 @@ namespace TypeScriptBuilder
         public static void Main(string[] args)
         {
             var
-                builder = new TypeScriptBuilder();
+                builder = new Planck.Tools.TypeScript.TypeScriptBuilder();
             
             builder.AddCSType(typeof(Employee));
+            builder.AddCSType(typeof(Strange<>));
 
             File.WriteAllText("Test.txt", builder.ToString());
         }
@@ -53,7 +55,8 @@ namespace TypeScriptBuilder
         public string[] ArrayTest;
         public List<DateTime> ListTest;
 
-        public Dictionary<int, string> LastIPs;
+        public Dictionary<int, DateTime> DictIntTest;
+        public Dictionary<string, DateTime> DictStringTest;
 
         public ICollection<Entity<DateTime>> CollectionTest;
 
@@ -66,5 +69,10 @@ namespace TypeScriptBuilder
     [TSExclude]
     public class Skip
     {
+    }
+
+    public class Strange<T>
+    {
+        public Dictionary<int, Entity<T>> Test;
     }
 }

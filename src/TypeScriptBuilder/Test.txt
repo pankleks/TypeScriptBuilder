@@ -1,22 +1,7 @@
-// generated at 7/22/2016 6:56:38 PM (UTC)
-
-export interface Employee extends Entity<number>
+export interface Strange<T>
 {
-	Login: string;
-	EmployeeType?: EmployeeType;
-	ArrayTest: string[];
-	ListTest: Date[];
-	LastIPs: {};
-	CollectionTest: Entity<Date>[];
-	Skip: Skip;
+	Test: { [index: number]: Entity<T> };
 }
-
-export enum EmployeeType
-{
-	Normal = 1,
-	Temporary = 2,
-}
-
 export interface Entity<T>
 {
 	Id: T;
@@ -24,11 +9,25 @@ export interface Entity<T>
 	Map2: Pair<string, Entity<string>>;
 	TestAny: any;
 }
-
 export interface Pair<T1, T2>
 {
 	t1: T1;
 	t2: T2;
 	TestProperty: number;
 }
-
+export interface Employee extends Entity<number>
+{
+	Login: string;
+	EmployeeType?: EmployeeType;
+	ArrayTest: string[];
+	ListTest: Date[];
+	DictIntTest: { [index: number]: Date };
+	DictStringTest: { [index: string]: Date };
+	CollectionTest: Entity<Date>[];
+	Skip: Skip;
+}
+export enum EmployeeType
+{
+	Normal = 1,
+	Temporary = 2,
+}

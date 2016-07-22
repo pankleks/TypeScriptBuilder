@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace TypeScriptBuilder
+namespace Planck.Tools.TypeScript
 {
     public class TypeScriptBuilder
     {
@@ -20,9 +20,6 @@ namespace TypeScriptBuilder
         public TypeScriptBuilder(params Type[] excludeTypes)
         {
             _exclude = new HashSet<Type>(excludeTypes);
-
-            _builder.AppendLine($"// generated at {DateTime.UtcNow} (UTC)");
-            _builder.AppendLine();
         }
 
         public void AddCSType(Type type)
@@ -71,7 +68,7 @@ namespace TypeScriptBuilder
                         return TypeName(type.GetElementType()) + "[]";
 
                     if (type == typeof(object))
-                        return "Object";
+                        return "any";
 
                     if (ti.IsGenericType)
                     {
@@ -82,7 +79,7 @@ namespace TypeScriptBuilder
 
                         if (genericType == typeof(Dictionary<,>))
                         {
-                            if (generics[0] != typeof(int) && generics[0] != typeof(string))
+                            if (generics[0] == typeof(int) || generics[0] == typeof(string))
                                 return $"{{ [index: {TypeName(generics[0])}]: {TypeName(generics[1])} }}";
 
                             return "{}";
@@ -122,7 +119,6 @@ namespace TypeScriptBuilder
                     _builder.AppendLine($"{e} = {(int)e},");
 
                 _builder.CloseScope();
-                _builder.AppendLine();
                 return;
             }
 
@@ -155,7 +151,6 @@ namespace TypeScriptBuilder
             GenerateFields(type, type.GetProperties(), f => f.PropertyType);
 
             _builder.CloseScope();
-            _builder.AppendLine();
         }
 
         void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType) where T : MemberInfo
