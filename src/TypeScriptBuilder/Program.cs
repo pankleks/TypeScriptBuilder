@@ -30,6 +30,8 @@ namespace TypeScriptBuilder
     {
         public T1 t1;
         public T2 t2;
+
+        public int TestProperty { get; set; }
     }
 
     public class Entity<T>
@@ -48,5 +50,15 @@ namespace TypeScriptBuilder
         public List<DateTime> LastAccessTimes;
 
         public Dictionary<int, string> LastIPs;
+
+        // exclude
+        public Skip Skip;
+        [TSExclude]
+        public int Skip2;
+    }
+
+    [TSExclude]
+    public class Skip
+    {
     }
 }

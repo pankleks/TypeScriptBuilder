@@ -12,13 +12,19 @@ namespace TypeScriptBuilder
         Stack<Type> _toDefine = new Stack<Type>();
         CodeTextBuilder _builder = new CodeTextBuilder();
 
+        public TypeScriptBuilder()
+        {
+            _builder.AppendLine($"// generated at {DateTime.UtcNow} (UTC)");
+            _builder.AppendLine();
+        }
+
         public void ToDefine(Type type)
         {
             if (_defined.Add(type))
                 _toDefine.Push(type);
         }
 
-        string WithoutGeneric(Type type)
+        static string WithoutGeneric(Type type)
         {
             return type.Name.Split('`')[0];
         }
@@ -94,6 +100,9 @@ namespace TypeScriptBuilder
             var
                 ti = type.GetTypeInfo();
 
+            if (ti.GetCustomAttribute<TSExclude>() != null)
+                return;
+
             if (ti.IsEnum)
             {
                 _builder.AppendLine($"export enum {type.Name}");
@@ -129,26 +138,35 @@ namespace TypeScriptBuilder
 
             _builder.OpenScope();
 
-            Type
-                fieldType;
+            // fields
+            GenerateFields(type, type.GetFields(), f => f.FieldType);
 
-            foreach (var fi in type.GetFields())
-            {
-                if (fi.DeclaringType == type)   // only fields defined in that type
-                {
-                    var
-                        nullable = Nullable.GetUnderlyingType(fi.FieldType);
-                    if (nullable != null)
-                        fieldType = fi.FieldType.GetGenericArguments()[0];
-                    else
-                        fieldType = fi.FieldType;
-
-                    _builder.AppendLine($"{fi.Name}{(nullable != null ? "?" : "")}: {TypeName(fieldType)};");
-                }
-            }
+            // properties
+            GenerateFields(type, type.GetProperties(), f => f.PropertyType);
 
             _builder.CloseScope();
             _builder.AppendLine();
+        }
+
+        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType) where T : MemberInfo
+        {
+            Type
+                fieldType;
+
+            foreach (var f in fields)
+            {
+                if (f.DeclaringType == type && f.GetCustomAttribute<TSExclude>() == null)   // only fields defined in that type
+                {
+                    var
+                        nullable = Nullable.GetUnderlyingType(getType(f));
+                    if (nullable != null)
+                        fieldType = getType(f).GetGenericArguments()[0];
+                    else
+                        fieldType = getType(f);
+
+                    _builder.AppendLine($"{f.Name}{(nullable != null ? "?" : "")}: {TypeName(fieldType)};");
+                }
+            }
         }
 
         public override string ToString()
@@ -158,5 +176,9 @@ namespace TypeScriptBuilder
 
             return _builder.ToString();
         }
+    }
+
+    public class TSExclude : Attribute
+    {
     }
 }
