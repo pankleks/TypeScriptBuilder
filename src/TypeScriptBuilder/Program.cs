@@ -40,6 +40,9 @@ namespace TypeScriptBuilder
 
         public Pair<int, Entity<int>> Map1;
         public Pair<string, Entity<string>> Map2;
+
+        [TSAny]
+        public DateTimeOffset TestAny;
     }
 
     public class Employee : Entity<int>

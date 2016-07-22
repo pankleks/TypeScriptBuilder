@@ -92,7 +92,7 @@ namespace TypeScriptBuilder
 
                     return type.Name;
                 default:
-                    throw new NotSupportedException($"type {type.FullName} not supported");
+                    return "any";
             }
         }
         public void DefineType(Type type)
@@ -164,7 +164,7 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    _builder.AppendLine($"{f.Name}{(nullable != null ? "?" : "")}: {TypeName(fieldType)};");
+                    _builder.AppendLine($"{f.Name}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
                 }
             }
         }
@@ -179,6 +179,10 @@ namespace TypeScriptBuilder
     }
 
     public class TSExclude : Attribute
+    {
+    }
+
+    public class TSAny : Attribute
     {
     }
 }
