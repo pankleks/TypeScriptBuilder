@@ -80,4 +80,15 @@ export interface Test {
 
 You can also pass types to exclude to `TypeScriptGenerator` constructor.
 
+## API usage
+
+`TypeScriptGenerator` exposes following methods:
+- `void AddCSType(Type type)` - add C# type to generate (dependency types will be added automatically)
+- `string TypeName(Type type)` - get TypeScript type name, if requested type requires declaration, it will be automatically added
+- `string ToString()` - gets string with generated type declarations
+
+Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
+
+You can also use `CodeBuilder` class that helps to build nicely formatted code.
+
 To learn more run `Test` project in the solution.
