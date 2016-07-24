@@ -31,6 +31,10 @@ namespace Test
         public T2 t2;
 
         public int TestProperty { get; set; }
+
+        void Test([TSAny]int n)
+        {
+        }
     }
 
     public class Entity<T>
