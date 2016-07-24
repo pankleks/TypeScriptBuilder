@@ -7,18 +7,27 @@ namespace TypeScriptBuilder
 {
     public class TypeScriptGenerator
     {
-        readonly HashSet<Type> 
+        readonly HashSet<Type>
             _defined = new HashSet<Type>();
-        readonly Stack<Type> 
+        readonly Stack<Type>
             _toDefine = new Stack<Type>();
-        readonly CodeTextBuilder 
+        readonly CodeTextBuilder
             _builder = new CodeTextBuilder();
+
+        readonly TypeScriptGeneratorOptions _options;
         readonly HashSet<Type>
             _exclude;
 
-        public TypeScriptGenerator(params Type[] excludeTypes)
+        public TypeScriptGenerator(TypeScriptGeneratorOptions options = null)
         {
-            _exclude = new HashSet<Type>(excludeTypes);
+            _exclude = new HashSet<Type>();
+            _options = options ?? new TypeScriptGeneratorOptions();
+        }
+
+        public TypeScriptGenerator ExcludeType(Type type)
+        {
+            _exclude.Add(type);
+            return this;
         }
 
         public void AddCSType(Type type)
@@ -168,9 +177,25 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    _builder.AppendLine($"{f.Name}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
+                    _builder.AppendLine($"{NormalizeFieldName(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
                 }
             }
+        }
+
+        public string NormalizeFieldName(string name)
+        {
+            if (!_options.UseCamelCase)
+                return name;
+
+            return char.ToLower(name[0]) + name.Substring(1);
+        }
+
+        public string NormalizeInterfaceName(string name)
+        {
+            if (!_options.AddIinInterface)
+                return name;
+
+            return 'I' + name;
         }
 
         public override string ToString()
@@ -181,7 +206,7 @@ namespace TypeScriptBuilder
             return _builder.ToString();
         }
     }
-    
+
     public class TSExclude : Attribute
     {
     }

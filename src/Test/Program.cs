@@ -10,7 +10,7 @@ namespace Test
         public static void Main(string[] args)
         {
             var
-                builder = new TypeScriptGenerator();
+                builder = new TypeScriptGenerator().ExcludeType(typeof(Program));
 
             builder.AddCSType(typeof(Employee));
             builder.AddCSType(typeof(Strange<>));
