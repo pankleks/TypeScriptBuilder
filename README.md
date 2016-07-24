@@ -78,7 +78,7 @@ export interface Test {
 - `TSExclude` - skips generation of type or field
 - `TSAny` - skips type analysis, emits `any` instead
 
-You can also pass types to exclude to `TypeScriptGenerator` constructor.
+You can also exclude types without attributes, use method `ExcludeType`.
 
 ## API usage
 
@@ -86,6 +86,7 @@ You can also pass types to exclude to `TypeScriptGenerator` constructor.
 - `void AddCSType(Type type)` - add C# type to generate (dependency types will be added automatically)
 - `string TypeName(Type type)` - get TypeScript type name, if requested type requires declaration, it will be automatically added
 - `string ToString()` - gets string with generated type declarations
+- `TypeScriptGenerator ExcludeType(Type type)` - exclude type
 
 Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
 
