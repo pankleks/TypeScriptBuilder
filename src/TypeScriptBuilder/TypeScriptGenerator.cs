@@ -11,8 +11,11 @@ namespace TypeScriptBuilder
             _defined = new HashSet<Type>();
         readonly Stack<Type>
             _toDefine = new Stack<Type>();
-        readonly CodeTextBuilder
-            _builder = new CodeTextBuilder();
+        //readonly CodeTextBuilder
+        //    _builder = new CodeTextBuilder();
+
+        readonly SortedDictionary<string, CodeTextBuilder>
+            _builder = new SortedDictionary<string, CodeTextBuilder>();
 
         readonly TypeScriptGeneratorOptions _options;
         readonly HashSet<Type>
@@ -99,15 +102,33 @@ namespace TypeScriptBuilder
 
                         AddCSType(genericType);
 
-                        return $"{WithoutGeneric(genericType)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
+                        return $"{NamespacePrefix(genericType)}{WithoutGeneric(genericType)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
                     }
 
                     AddCSType(type);
 
-                    return type.Name;
+                    return NamespacePrefix(type) + type.Name;
                 default:
                     return "any";
             }
+        }
+
+        string NamespacePrefix(Type type)
+        {
+            return type.Namespace == _namespace ? "" : (type.Namespace + '.');
+        }
+
+        string _namespace = "";
+        CodeTextBuilder Builder
+        {
+            get { return _builder[_namespace];  }
+        }       
+        void SetNamespace(Type type)
+        {
+            _namespace = type.Namespace;
+
+            if (!_builder.ContainsKey(_namespace))
+                _builder[_namespace] = new CodeTextBuilder();
         }
 
         void GenerateTypeDefinition(Type type)
@@ -118,39 +139,41 @@ namespace TypeScriptBuilder
             if (ti.GetCustomAttribute<TSExclude>() != null || _exclude.Contains(type))
                 return;
 
+            SetNamespace(type);
+
             if (ti.IsEnum)
             {
-                _builder.AppendLine($"export enum {type.Name}");
-                _builder.OpenScope();
+                Builder.AppendLine($"export enum {type.Name}");
+                Builder.OpenScope();
 
                 foreach (var e in Enum.GetValues(type))
-                    _builder.AppendLine($"{e} = {(int)e},");
+                    Builder.AppendLine($"{e} = {(int)e},");
 
-                _builder.CloseScope();
+                Builder.CloseScope();
                 return;
             }
 
-            _builder.Append($"export interface ");
+            Builder.Append($"export interface ");
 
             if (ti.IsGenericType)
             {
-                _builder.Append(WithoutGeneric(type));
-                _builder.Append("<");
+                Builder.Append(WithoutGeneric(type));
+                Builder.Append("<");
 
-                _builder.Append(string.Join(", ", ti.GetGenericArguments().Select(e => e.Name)));
+                Builder.Append(string.Join(", ", ti.GetGenericArguments().Select(e => e.Name)));
 
-                _builder.Append(">");
+                Builder.Append(">");
             }
             else
-                _builder.Append(type.Name);
+                Builder.Append(type.Name);
 
             var
                 baseType = ti.BaseType;
 
             if (baseType != null && baseType != typeof(object))
-                _builder.AppendLine($" extends {TypeName(baseType)}");
+                Builder.AppendLine($" extends {TypeName(baseType)}");
 
-            _builder.OpenScope();
+            Builder.OpenScope();
 
             // fields
             GenerateFields(type, type.GetFields(), f => f.FieldType);
@@ -158,7 +181,7 @@ namespace TypeScriptBuilder
             // properties
             GenerateFields(type, type.GetProperties(), f => f.PropertyType);
 
-            _builder.CloseScope();
+            Builder.CloseScope();
         }
 
         void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType) where T : MemberInfo
@@ -177,7 +200,7 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    _builder.AppendLine($"{NormalizeFieldName(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
+                    Builder.AppendLine($"{NormalizeFieldName(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
                 }
             }
         }
@@ -203,7 +226,20 @@ namespace TypeScriptBuilder
             while (_toDefine.Count > 0)
                 GenerateTypeDefinition(_toDefine.Pop());
 
-            return _builder.ToString();
+            var
+                builder = new CodeTextBuilder();
+
+            foreach (var e in _builder)
+            {
+                builder.AppendLine($"namespace {e.Key}");
+                builder.OpenScope();
+
+                builder.Append(e.Value.ToString());
+
+                builder.CloseScope();
+            }
+
+            return builder.ToString();
         }
     }
 

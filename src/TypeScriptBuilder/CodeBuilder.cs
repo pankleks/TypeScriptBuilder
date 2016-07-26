@@ -77,7 +77,6 @@ namespace TypeScriptBuilder
             _closeLine = true;
         }
 
-
         public override string ToString()
         {
             if (_openScopes > 0)

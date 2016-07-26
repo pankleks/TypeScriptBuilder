@@ -12,37 +12,28 @@ namespace Test
             var
                 builder = new TypeScriptGenerator().ExcludeType(typeof(Program));
 
-            builder.AddCSType(typeof(Employee));
-            builder.AddCSType(typeof(Strange<>));
+            builder.AddCSType(typeof(TestA.Employee));
+            builder.AddCSType(typeof(TestB.Strange<>));
 
-            File.WriteAllText("Test.txt", builder.ToString());
+            File.WriteAllText("Test.ts", builder.ToString());
         }
     }
+}
 
+namespace TestA
+{
     public enum EmployeeType
     {
         Normal = 1,
         Temporary = 2
     }
 
-    public class Pair<T1, T2>
-    {
-        public T1 t1;
-        public T2 t2;
-
-        public int TestProperty { get; set; }
-
-        void Test([TSAny]int n)
-        {
-        }
-    }
-
     public class Entity<T>
     {
         public T Id;
 
-        public Pair<int, Entity<int>> Map1;
-        public Pair<string, Entity<string>> Map2;
+        public TestB.Pair<int, Entity<int>> Map1;
+        public TestB.Pair<string, Entity<string>> Map2;
 
         [TSAny]
         public DateTimeOffset TestAny;
@@ -62,6 +53,7 @@ namespace Test
         public ICollection<Entity<DateTime>> CollectionTest;
 
         // exclude
+        [TSAny]
         public Skip Skip;
         [TSExclude]
         public int Skip2;
@@ -71,9 +63,23 @@ namespace Test
     public class Skip
     {
     }
+}
 
+namespace TestB
+{
+    public class Pair<T1, T2>
+    {
+        public T1 t1;
+        public T2 t2;
+
+        public int TestProperty { get; set; }
+
+        void Test([TSAny]int n)
+        {
+        }
+    }
     public class Strange<T>
     {
-        public Dictionary<int, Entity<T>> Test;
+        public Dictionary<int, TestA.Entity<T>> Test;
     }
 }
