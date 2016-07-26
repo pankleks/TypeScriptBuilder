@@ -9,7 +9,7 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "TypeScriptBuilder": "0.1.2"
+    "TypeScriptBuilder": "0.1.3"
   },
 
   "frameworks": {

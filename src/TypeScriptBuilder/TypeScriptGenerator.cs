@@ -11,9 +11,6 @@ namespace TypeScriptBuilder
             _defined = new HashSet<Type>();
         readonly Stack<Type>
             _toDefine = new Stack<Type>();
-        //readonly CodeTextBuilder
-        //    _builder = new CodeTextBuilder();
-
         readonly SortedDictionary<string, CodeTextBuilder>
             _builder = new SortedDictionary<string, CodeTextBuilder>();
 
@@ -102,12 +99,12 @@ namespace TypeScriptBuilder
 
                         AddCSType(genericType);
 
-                        return $"{NamespacePrefix(genericType)}{WithoutGeneric(genericType)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
+                        return $"{NamespacePrefix(genericType)}{NormalizeInterface(WithoutGeneric(genericType))}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
                     }
 
                     AddCSType(type);
 
-                    return NamespacePrefix(type) + type.Name;
+                    return NamespacePrefix(type) + NormalizeInterface(type.Name);
                 default:
                     return "any";
             }
@@ -121,8 +118,8 @@ namespace TypeScriptBuilder
         string _namespace = "";
         CodeTextBuilder Builder
         {
-            get { return _builder[_namespace];  }
-        }       
+            get { return _builder[_namespace]; }
+        }
         void SetNamespace(Type type)
         {
             _namespace = type.Namespace;
@@ -143,7 +140,7 @@ namespace TypeScriptBuilder
 
             if (ti.IsEnum)
             {
-                Builder.AppendLine($"export enum {type.Name}");
+                Builder.AppendLine($"export enum {TypeName(type)}");
                 Builder.OpenScope();
 
                 foreach (var e in Enum.GetValues(type))
@@ -153,19 +150,19 @@ namespace TypeScriptBuilder
                 return;
             }
 
-            Builder.Append($"export interface ");
+            Builder.Append($"export interface {TypeName(type)}");
 
-            if (ti.IsGenericType)
-            {
-                Builder.Append(WithoutGeneric(type));
-                Builder.Append("<");
+            //if (ti.IsGenericType)
+            //{
+            //    Builder.Append(NormalizeInterfaceName(WithoutGeneric(type)));
+            //    Builder.Append("<");
 
-                Builder.Append(string.Join(", ", ti.GetGenericArguments().Select(e => e.Name)));
+            //    Builder.Append(string.Join(", ", ti.GetGenericArguments().Select(e => e.Name)));
 
-                Builder.Append(">");
-            }
-            else
-                Builder.Append(type.Name);
+            //    Builder.Append(">");
+            //}
+            //else
+            //    Builder.Append(NormalizeInterfaceName(type.Name));
 
             var
                 baseType = ti.BaseType;
@@ -200,12 +197,12 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    Builder.AppendLine($"{NormalizeFieldName(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
+                    Builder.AppendLine($"{NormalizeField(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
                 }
             }
         }
 
-        public string NormalizeFieldName(string name)
+        public string NormalizeField(string name)
         {
             if (!_options.UseCamelCase)
                 return name;
@@ -213,7 +210,7 @@ namespace TypeScriptBuilder
             return char.ToLower(name[0]) + name.Substring(1);
         }
 
-        public string NormalizeInterfaceName(string name)
+        public string NormalizeInterface(string name)
         {
             if (!_options.AddIinInterface)
                 return name;
@@ -234,7 +231,7 @@ namespace TypeScriptBuilder
                 builder.AppendLine($"namespace {e.Key}");
                 builder.OpenScope();
 
-                builder.Append(e.Value.ToString());
+                builder.AppendLine(e.Value.ToString());
 
                 builder.CloseScope();
             }
