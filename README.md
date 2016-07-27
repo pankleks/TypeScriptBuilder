@@ -90,6 +90,6 @@ You can also exclude types without attributes, use method `ExcludeType`.
 
 Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
 
-You can also use `CodeBuilder` class that helps to build nicely formatted code.
+You can also use `CodeTextBuilder` helper class that is used to build nicely formatted code.
 
 To learn more run `Test` project in the solution.
