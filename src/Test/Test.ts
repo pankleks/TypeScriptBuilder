@@ -26,7 +26,7 @@ namespace TestA
 }
 namespace TestB
 {
-	export interface IStrange<T>
+	export class Strange<T>
 	{
 		test: { [index: number]: TestA.IEntity<T> };
 	}

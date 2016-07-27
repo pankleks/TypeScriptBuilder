@@ -15,7 +15,7 @@ namespace Test
             builder.AddCSType(typeof(TestA.Employee));
             builder.AddCSType(typeof(TestB.Strange<>));
 
-            File.WriteAllText("Test.ts", builder.ToString());
+            builder.Store("Test.ts");
         }
     }
 }
@@ -78,6 +78,8 @@ namespace TestB
         {
         }
     }
+
+    [TSClass]
     public class Strange<T>
     {
         public Dictionary<int, TestA.Entity<T>> Test;

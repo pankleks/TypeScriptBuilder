@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -30,10 +31,12 @@ namespace TypeScriptBuilder
             return this;
         }
 
-        public void AddCSType(Type type)
+        public TypeScriptGenerator AddCSType(Type type)
         {
             if (_defined.Add(type))
                 _toDefine.Push(type);
+
+            return this;
         }
 
         static string WithoutGeneric(Type type)
@@ -41,7 +44,7 @@ namespace TypeScriptBuilder
             return type.Name.Split('`')[0];
         }
 
-        public string TypeName(Type type)
+        public string TypeName(Type type, bool forceClass = false)
         {
             var
                 ti = type.GetTypeInfo();
@@ -99,12 +102,12 @@ namespace TypeScriptBuilder
 
                         AddCSType(genericType);
 
-                        return $"{NamespacePrefix(genericType)}{NormalizeInterface(WithoutGeneric(genericType))}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
+                        return $"{NamespacePrefix(genericType)}{NormalizeInterface(WithoutGeneric(genericType), forceClass)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
                     }
 
                     AddCSType(type);
 
-                    return NamespacePrefix(type) + NormalizeInterface(type.Name);
+                    return NamespacePrefix(type) + NormalizeInterface(type.Name, forceClass);
                 default:
                     return "any";
             }
@@ -150,19 +153,10 @@ namespace TypeScriptBuilder
                 return;
             }
 
-            Builder.Append($"export interface {TypeName(type)}");
+            bool
+                forceClass = ti.GetCustomAttribute<TSClass>() != null;
 
-            //if (ti.IsGenericType)
-            //{
-            //    Builder.Append(NormalizeInterfaceName(WithoutGeneric(type)));
-            //    Builder.Append("<");
-
-            //    Builder.Append(string.Join(", ", ti.GetGenericArguments().Select(e => e.Name)));
-
-            //    Builder.Append(">");
-            //}
-            //else
-            //    Builder.Append(NormalizeInterfaceName(type.Name));
+            Builder.Append($"export {(forceClass ? "class" : "interface")} {TypeName(type, forceClass)}");
 
             var
                 baseType = ti.BaseType;
@@ -210,9 +204,9 @@ namespace TypeScriptBuilder
             return char.ToLower(name[0]) + name.Substring(1);
         }
 
-        public string NormalizeInterface(string name)
+        public string NormalizeInterface(string name, bool forceClass)
         {
-            if (!_options.AddIinInterface)
+            if (forceClass || !_options.AddIinInterface)
                 return name;
 
             return 'I' + name;
@@ -238,6 +232,11 @@ namespace TypeScriptBuilder
 
             return builder.ToString();
         }
+
+        public void Store(string file)
+        {
+            File.WriteAllText(file, ToString());
+        }
     }
 
     public class TSExclude : Attribute
@@ -246,6 +245,11 @@ namespace TypeScriptBuilder
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter)]
     public class TSAny : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public class TSClass : Attribute
     {
     }
 }
