@@ -84,7 +84,7 @@ You can also exclude types without attributes, use method `ExcludeType`.
 ## API usage
 
 `TypeScriptGenerator` exposes following methods:
-- `void AddCSType(Type type)` - add C# type to generate (dependency types will be added automatically)
+- `TypeScriptGenerator AddCSType(Type type)` - add C# type to generate (dependency types will be added automatically)
 - `string TypeName(Type type)` - get TypeScript type name, if requested type requires declaration, it will be automatically added
 - `string ToString()` - gets string with generated type declarations
 - `TypeScriptGenerator ExcludeType(Type type)` - exclude type
@@ -92,5 +92,13 @@ You can also exclude types without attributes, use method `ExcludeType`.
 Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
 
 You can also use `CodeTextBuilder` helper class that is used to build nicely formatted code.
+
+### Options
+
+You can pass options `TypeScriptGenerator` constructor:
+
+- `UseCamelCase`: changes field names form `MyTestField` to `myTestField` (default true)
+- `EmitIinInterface`: adds I in interface names, `MySimpleData` becomes `IMySimpleData` (default true)
+- `EmitReadonly`: adds `readonly` to readonly fields, requires TypeScript 2.0 (default true)
 
 To learn more run `Test` project in the solution.
