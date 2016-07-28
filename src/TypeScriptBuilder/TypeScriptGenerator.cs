@@ -191,7 +191,7 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    if (getReadonly(f))
+                    if (_options.EmitReadonly && getReadonly(f))
                         Builder.Append("readonly ");
 
                     Builder.Append(NormalizeField(f.Name));
@@ -249,30 +249,6 @@ namespace TypeScriptBuilder
         public void Store(string file)
         {
             File.WriteAllText(file, ToString());
-        }
-    }
-
-    public class TSExclude : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter)]
-    public class TSAny : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct), Obsolete("experimental")]
-    public class TSClass : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property), Obsolete("experimental")]
-    public class TSInitialize : Attribute
-    {
-        public readonly string Body;
-        public TSInitialize(string body)
-        {
-            Body = body;
         }
     }
 }
