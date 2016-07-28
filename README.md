@@ -76,6 +76,8 @@ export interface Test {
 
 ```
 ## Control attributes
+
+You can annotate your classes with below attributes to control generation:
 - `TSExclude` - skips generation of type or field
 - `TSAny` - skips type analysis, emits `any` instead
 
@@ -84,13 +86,22 @@ You can also exclude types without attributes, use method `ExcludeType`.
 ## API usage
 
 `TypeScriptGenerator` exposes following methods:
-- `void AddCSType(Type type)` - add C# type to generate (dependency types will be added automatically)
-- `string TypeName(Type type)` - get TypeScript type name, if requested type requires declaration, it will be automatically added
-- `string ToString()` - gets string with generated type declarations
+- `TypeScriptGenerator AddCSType(Type type)`: add C# type to generate (dependency types will be added automatically)
+- `string TypeName(Type type)`: get TypeScript type name, if requested type requires declaration, it will be automatically added
+- `string ToString()`: gets string with generated type declarations (all namespaces combined)
+- `void Store(string file)`: stores declarations in to the file
 - `TypeScriptGenerator ExcludeType(Type type)` - exclude type
 
 Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
 
 You can also use `CodeTextBuilder` helper class that is used to build nicely formatted code.
+
+### Options
+
+You can pass options `TypeScriptGenerator` constructor:
+
+- `UseCamelCase`: changes field names form `MyTestField` to `myTestField` (default true)
+- `EmitIinInterface`: adds I in interface names, `MySimpleData` becomes `IMySimpleData` (default true)
+- `EmitReadonly`: adds `readonly` to readonly fields, requires TypeScript 2.0 (default true)
 
 To learn more run `Test` project in the solution.
