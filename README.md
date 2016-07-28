@@ -76,6 +76,8 @@ export interface Test {
 
 ```
 ## Control attributes
+
+You can annotate your classes with below attributes to control generation:
 - `TSExclude` - skips generation of type or field
 - `TSAny` - skips type analysis, emits `any` instead
 
