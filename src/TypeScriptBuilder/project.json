@@ -3,6 +3,7 @@
   "title": "TypeScript builder",
   "description": "Generates TypeScript type definition based on C# types",
   "authors": [ "Krzysztof Heim" ],
+  "projectUrl": "https://github.com/pankleks/TypeScriptBuilder",
   "packOptions": {
     "repository": {
       "type": "git",

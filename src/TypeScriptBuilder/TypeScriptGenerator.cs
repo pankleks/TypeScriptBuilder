@@ -219,7 +219,7 @@ namespace TypeScriptBuilder
 
         public string NormalizeInterface(string name, bool forceClass)
         {
-            if (forceClass || !_options.AddIinInterface)
+            if (forceClass || !_options.EmitIinInterface)
                 return name;
 
             return 'I' + name;
