@@ -15,6 +15,7 @@ Install-Package TypeScriptBuilder
 - Resolving type dependency
 - Generics
 - Type inheritance
+- Namespaces (modules)
 - Enums
 - Nullable types
 - Dictionary converison (to strong type TS indexed objects)
