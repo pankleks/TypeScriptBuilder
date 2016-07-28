@@ -82,6 +82,7 @@ namespace TestB
     [TSClass]
     public class Strange<T>
     {
+        [TSInitialize("{}")]
         public Dictionary<int, TestA.Entity<T>> Test;
     }
 }

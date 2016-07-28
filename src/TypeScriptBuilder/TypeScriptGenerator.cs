@@ -167,15 +167,15 @@ namespace TypeScriptBuilder
             Builder.OpenScope();
 
             // fields
-            GenerateFields(type, type.GetFields(), f => f.FieldType);
+            GenerateFields(type, type.GetFields(), f => f.FieldType, forceClass);
 
             // properties
-            GenerateFields(type, type.GetProperties(), f => f.PropertyType);
+            GenerateFields(type, type.GetProperties(), f => f.PropertyType, forceClass);
 
             Builder.CloseScope();
         }
 
-        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType) where T : MemberInfo
+        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, bool forceClass) where T : MemberInfo
         {
             Type
                 fieldType;
@@ -191,7 +191,17 @@ namespace TypeScriptBuilder
                     else
                         fieldType = getType(f);
 
-                    Builder.AppendLine($"{NormalizeField(f.Name)}{(nullable != null ? "?" : "")}: {(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any")};");
+                    Builder.Append(NormalizeField(f.Name));
+                    Builder.Append(nullable != null ? "?" : "");
+                    Builder.Append(": ");
+                    Builder.Append(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any");
+
+                    var
+                        init = f.GetCustomAttribute<TSInitialize>();
+                    if (forceClass && init != null)
+                        Builder.Append($" = {init.Body}");
+
+                    Builder.AppendLine(";");
                 }
             }
         }
@@ -248,8 +258,18 @@ namespace TypeScriptBuilder
     {
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct), Obsolete("experimental")]
     public class TSClass : Attribute
     {
+    }
+
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property), Obsolete("experimental")]
+    public class TSInitialize : Attribute
+    {
+        public readonly string Body;
+        public TSInitialize(string body)
+        {
+            Body = body;
+        }
     }
 }

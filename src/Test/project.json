@@ -9,7 +9,7 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "TypeScriptBuilder": "0.1.4"  },
+    "TypeScriptBuilder": "0.1.5"  },
 
   "frameworks": {
     "netcoreapp1.0": {

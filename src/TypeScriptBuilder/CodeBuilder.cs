@@ -11,7 +11,7 @@ namespace TypeScriptBuilder
         int
             _openScopes = 0;
         bool
-            _closeLine = false;
+            _appending = false;
 
         public CodeTextBuilder()
         {
@@ -26,10 +26,10 @@ namespace TypeScriptBuilder
 
         void CloseLine()
         {
-            if (_closeLine)
+            if (_appending)
             {
                 _builder.AppendLine();
-                _closeLine = false;
+                _appending = false;
             }
         }
 
@@ -64,17 +64,24 @@ namespace TypeScriptBuilder
             using (var reader = new StringReader(text))
                 while ((temp = reader.ReadLine()) != null)
                 {
-                    EmitIdent();
+                    if (_appending)
+                        _appending = false;
+                    else
+                        EmitIdent();
+
                     _builder.AppendLine(temp);
                 }
 
-            _closeLine = false;
+            _appending = false;
         }
 
         public void Append(string text)
         {
+            if (!_appending)
+                EmitIdent();
+
             _builder.Append(text);
-            _closeLine = true;
+            _appending = true;
         }
 
         public override string ToString()
