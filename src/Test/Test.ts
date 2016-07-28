@@ -28,7 +28,7 @@ namespace TestB
 {
 	export class Strange<T>
 	{
-		test: { [index: number]: TestA.IEntity<T> } = {};
+		readonly test: { [index: number]: TestA.IEntity<T> } = {};
 	}
 	export interface IPair<T1, T2>
 	{

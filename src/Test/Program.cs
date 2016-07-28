@@ -83,6 +83,6 @@ namespace TestB
     public class Strange<T>
     {
         [TSInitialize("{}")]
-        public Dictionary<int, TestA.Entity<T>> Test;
+        public readonly Dictionary<int, TestA.Entity<T>> Test;
     }
 }

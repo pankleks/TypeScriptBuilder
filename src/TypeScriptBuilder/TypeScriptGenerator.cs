@@ -167,15 +167,15 @@ namespace TypeScriptBuilder
             Builder.OpenScope();
 
             // fields
-            GenerateFields(type, type.GetFields(), f => f.FieldType, forceClass);
+            GenerateFields(type, type.GetFields(), f => f.FieldType, f => f.IsInitOnly, forceClass);
 
             // properties
-            GenerateFields(type, type.GetProperties(), f => f.PropertyType, forceClass);
+            GenerateFields(type, type.GetProperties(), f => f.PropertyType, f => false, forceClass);
 
             Builder.CloseScope();
         }
 
-        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, bool forceClass) where T : MemberInfo
+        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, Func<T, bool> getReadonly, bool forceClass) where T : MemberInfo
         {
             Type
                 fieldType;
@@ -190,6 +190,9 @@ namespace TypeScriptBuilder
                         fieldType = getType(f).GetGenericArguments()[0];
                     else
                         fieldType = getType(f);
+
+                    if (getReadonly(f))
+                        Builder.Append("readonly ");
 
                     Builder.Append(NormalizeField(f.Name));
                     Builder.Append(nullable != null ? "?" : "");
