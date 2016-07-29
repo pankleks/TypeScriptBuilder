@@ -46,7 +46,7 @@ class User
 ```
 Output TypeScript:
 ```ts
-export interface User
+export interface IUser
 {
   Id: number;
   Login: string;
@@ -67,11 +67,11 @@ class Test
 }
 ```
 ```ts
-export interface Entity<T> {
+export interface IEntity<T> {
     Value: T;
 }
-export interface Test {
-    Repo: { [index: number]: Entity<Date> };
+export interface ITest {
+    Repo: { [index: number]: IEntity<Date> };
 }
 
 ```
