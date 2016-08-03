@@ -1,13 +1,13 @@
 namespace TestA
 {
-	export interface IEntity<T>
+	export interface IFunky<T>
 	{
 		id: T;
-		map1: TestB.IPair<number, IEntity<number>>;
-		map2: TestB.IPair<string, IEntity<string>>;
+		map1: TestB.IPair<number, IFunky<number>>;
+		map2: TestB.IPair<string, IFunky<string>>;
 		testAny: any;
 	}
-	export interface IEmployee extends IEntity<number>
+	export interface IEmployee extends IFunky<number>
 	{
 		login: string;
 		employeeType?: EmployeeType;
@@ -15,8 +15,12 @@ namespace TestA
 		listTest: Date[];
 		dictIntTest: { [index: number]: Date };
 		dictStringTest: { [index: string]: Date };
-		collectionTest: IEntity<Date>[];
+		collectionTest: IFunky<Date>[];
 		skip: any;
+		id: number;
+		map1: TestB.IPair<number, IFunky<number>>;
+		map2: TestB.IPair<string, IFunky<string>>;
+		testAny: any;
 	}
 	export enum EmployeeType
 	{
@@ -28,7 +32,7 @@ namespace TestB
 {
 	export class Strange<T>
 	{
-		readonly test: { [index: number]: TestA.IEntity<T> } = {};
+		readonly test: { [index: number]: TestA.IFunky<T> } = {};
 	}
 	export interface IPair<T1, T2>
 	{

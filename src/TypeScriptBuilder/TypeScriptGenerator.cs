@@ -81,6 +81,9 @@ namespace TypeScriptBuilder
                     if (type == typeof(object))
                         return "any";
 
+                    TSMap
+                        map;
+
                     if (ti.IsGenericType)
                     {
                         var
@@ -102,12 +105,16 @@ namespace TypeScriptBuilder
 
                         AddCSType(genericType);
 
-                        return $"{NamespacePrefix(genericType)}{NormalizeInterface(WithoutGeneric(genericType), forceClass)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
+                        map = genericType.GetTypeInfo().GetCustomAttribute<TSMap>(false);
+
+                        return $"{NamespacePrefix(genericType)}{NormalizeInterface(map == null ? WithoutGeneric(genericType) : map.Name, forceClass)}<{string.Join(", ", generics.Select(e => TypeName(e)))}>";
                     }
 
                     AddCSType(type);
 
-                    return NamespacePrefix(type) + NormalizeInterface(type.Name, forceClass);
+                    map = type.GetTypeInfo().GetCustomAttribute<TSMap>(false);
+
+                    return NamespacePrefix(type) + NormalizeInterface(map == null ? type.Name : map.Name, forceClass);
                 default:
                     return "any";
             }
@@ -167,10 +174,10 @@ namespace TypeScriptBuilder
             Builder.OpenScope();
 
             // fields
-            GenerateFields(type, type.GetFields(), f => f.FieldType, f => f.IsInitOnly, forceClass);
+            GenerateFields(type, type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly), f => f.FieldType, f => f.IsInitOnly, forceClass);
 
             // properties
-            GenerateFields(type, type.GetProperties(), f => f.PropertyType, f => false, forceClass);
+            GenerateFields(type, type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly), f => f.PropertyType, f => false, forceClass);
 
             Builder.CloseScope();
         }
@@ -182,7 +189,7 @@ namespace TypeScriptBuilder
 
             foreach (var f in fields)
             {
-                if (f.DeclaringType == type && f.GetCustomAttribute<TSExclude>() == null)   // only fields defined in that type
+                if (f.GetCustomAttribute<TSExclude>() == null)   // only fields defined in that type
                 {
                     var
                         nullable = Nullable.GetUnderlyingType(getType(f));

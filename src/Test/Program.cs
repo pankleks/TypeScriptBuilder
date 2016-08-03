@@ -28,6 +28,7 @@ namespace TestA
         Temporary = 2
     }
 
+    [TSMap("Funky")]
     public class Entity<T>
     {
         public T Id;

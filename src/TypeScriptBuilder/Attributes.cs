@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace TypeScriptBuilder
 {
-
     public class TSExclude : Attribute
     {
     }
@@ -27,6 +26,15 @@ namespace TypeScriptBuilder
         public TSInitialize(string body)
         {
             Body = body;
+        }
+    }
+
+    public class TSMap : Attribute
+    {
+        public readonly string Name;
+        public TSMap(string name)
+        {
+            Name = name;
         }
     }
 }
