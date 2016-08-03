@@ -7,6 +7,14 @@ namespace TestA
 		map2: TestB.IPair<string, IFunkyEntity<string>>;
 		testAny: any;
 	}
+	export interface IEquipment
+	{
+		code: number;
+		id: number;
+		map1: TestB.IPair<number, IFunkyEntity<number>>;
+		map2: TestB.IPair<string, IFunkyEntity<string>>;
+		testAny: any;
+	}
 	export interface IEmployee extends IFunkyEntity<number>
 	{
 		login: string;

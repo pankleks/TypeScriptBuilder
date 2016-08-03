@@ -38,4 +38,9 @@ namespace TypeScriptBuilder
             Name = name;
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class TSFlat : Attribute
+    {
+    }
 }

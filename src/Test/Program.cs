@@ -12,8 +12,10 @@ namespace Test
             var
                 builder = new TypeScriptGenerator().ExcludeType(typeof(Program));
 
-            builder.AddCSType(typeof(TestA.Employee));
-            builder.AddCSType(typeof(TestB.Strange<>));
+            builder
+                .AddCSType(typeof(TestA.Employee))
+                .AddCSType(typeof(TestA.Equipment))
+                .AddCSType(typeof(TestB.Strange<>));
 
             builder.Store("Test.ts");
         }
@@ -39,6 +41,12 @@ namespace TestA
 
         [TSAny]
         public DateTimeOffset TestAny;
+    }
+
+    [TSFlat]
+    public class Equipment: Entity<short>
+    {
+        public int Code;
     }
 
     public class Employee : Entity<int>

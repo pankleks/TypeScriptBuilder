@@ -160,23 +160,29 @@ namespace TypeScriptBuilder
             }
 
             bool
-                forceClass = ti.GetCustomAttribute<TSClass>() != null;
+                forceClass = ti.GetCustomAttribute<TSClass>() != null,
+                flat = ti.GetCustomAttribute<TSFlat>() != null;
 
             Builder.Append($"export {(forceClass ? "class" : "interface")} {TypeName(type, forceClass)}");
 
             var
                 baseType = ti.BaseType;
 
-            if (ti.IsClass && baseType != null && baseType != typeof(object))
+            if (ti.IsClass && !flat && baseType != null && baseType != typeof(object))
                 Builder.AppendLine($" extends {TypeName(baseType)}");
 
             Builder.OpenScope();
 
+            var
+                flags = BindingFlags.Instance | BindingFlags.Public;
+            if (!flat)
+                flags |= BindingFlags.DeclaredOnly;
+
             // fields
-            GenerateFields(type, type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly), f => f.FieldType, f => f.IsInitOnly, forceClass);
+            GenerateFields(type, type.GetFields(flags), f => f.FieldType, f => f.IsInitOnly, forceClass);
 
             // properties
-            GenerateFields(type, type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly), f => f.PropertyType, f => false, forceClass);
+            GenerateFields(type, type.GetProperties(flags), f => f.PropertyType, f => false, forceClass);
 
             Builder.CloseScope();
         }
