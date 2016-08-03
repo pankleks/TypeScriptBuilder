@@ -84,7 +84,7 @@ You can annotate code with below attributes to affect TS code generation.
 
 ### TSExclude
 Can be applied on classes, stucts or fields/properties - these items will be omited during TS code generation.
-You can also exclude types by using method `ExcludeType`.
+Note: You can also exclude types by using method `ExcludeType`.
 
 ### TSAny
 When applied on field/property it's type will be set to `any` and skips fruther type analizes.
@@ -110,7 +110,7 @@ export interface Test {
 ```
 
 ### TSFlat
-If applied on class (B), all fields from base classes (A) are included in class (B):
+If applied on class (B), all fields from base classe (A) are included in class (B):
 ```cs
 class A
 {
@@ -125,8 +125,8 @@ class B : A
 ```
 ```ts
 export interface B {
-    Id: number;
-    Active: boolean;
+    Id: number;         // from A
+    Active: boolean;    // from A
     Name: string;
 }
 ```
