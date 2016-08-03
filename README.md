@@ -80,12 +80,56 @@ export interface ITest {
 ```
 ## Control attributes
 
-You can annotate your classes with below attributes to control generation:
-- `TSExclude` - skips generation of type or field
-- `TSAny` - skips type analysis, emits `any` instead
-- `TSMap` - can be used to rename generated type
+You can annotate your code with below attributes to affect TS code generation.
 
-You can also exclude types without attributes, use method `ExcludeType`.
+### TSExclude
+Can be applied on classes, stucts or fields/properties - these items will be omited during TS code generation.
+You can also exclude types by using method `ExcludeType`.
+
+### TSAny
+When applied on field/property it's type will be set to `any` and skips fruther type analizes.
+
+### TSMap(name)
+Can be used on classes or structs to rename generated type:
+```cs
+[TSMap("Funky")]
+class MyCSharpClass
+{
+}
+class Test 
+{
+    public MyCSharpClass Instance;
+}
+```
+```ts
+export interface Funky {
+}
+export interface Test {
+    Instance: Funky;
+}
+```
+
+### TSFlat
+If applied on class (B), all fields from base classes (A) are included in class (B):
+```cs
+class A
+{
+    public int Id;
+    public bool Active;
+}
+[TSFlat]
+class B : A
+{
+    public string Name;
+}
+```
+```ts
+export interface B {
+    Id: number;
+    Active: boolean;
+    Name: string;
+}
+```
 
 ## API usage
 
