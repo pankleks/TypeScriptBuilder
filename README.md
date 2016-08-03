@@ -19,7 +19,7 @@ Install-Package TypeScriptBuilder
 - Enums
 - Nullable types
 - Dictionary converison (to strong type TS indexed objects)
-- Excluding types
+- Set of code generation control attributes
 - `any` for types that can't be converted
 
 ## Usage / Samples
