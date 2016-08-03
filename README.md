@@ -93,7 +93,7 @@ You can also exclude types without attributes, use method `ExcludeType`.
 - `string TypeName(Type type)`: get TypeScript type name, if requested type requires declaration, it will be automatically added
 - `string ToString()`: gets string with generated type declarations (all namespaces combined)
 - `void Store(string file)`: stores declarations in to the file
-- `TypeScriptGenerator ExcludeType(Type type)` - exclude type
+- `TypeScriptGenerator ExcludeType(Type type)`: exclude type
 
 Simply use above methods according to your needs, then use `ToString` to get generated type declarations.
 
