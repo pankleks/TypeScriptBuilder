@@ -6,10 +6,7 @@ You can also wrtie small console app, to generate code by pre-build tools.
 
 <b>Works on Full & NET Core framework!</b>
 
-Install by nuget:
-```
-Install-Package TypeScriptBuilder
-```
+Install by nuget: `Install-Package TypeScriptBuilder`
 
 ## Supported features
 - Resolving type dependency
