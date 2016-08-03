@@ -80,7 +80,7 @@ export interface ITest {
 ```
 ## Control attributes
 
-You can annotate your code with below attributes to affect TS code generation.
+You can annotate code with below attributes to affect TS code generation.
 
 ### TSExclude
 Can be applied on classes, stucts or fields/properties - these items will be omited during TS code generation.
@@ -90,7 +90,7 @@ You can also exclude types by using method `ExcludeType`.
 When applied on field/property it's type will be set to `any` and skips fruther type analizes.
 
 ### TSMap(name)
-Can be used on classes or structs to rename generated type:
+Can be used on class, struct or enum to rename generated type:
 ```cs
 [TSMap("Funky")]
 class MyCSharpClass
