@@ -30,8 +30,11 @@ var
 // add types you need (dependant types will be added automatically)
 ts.AddCSType(typeof(User));
 
-// write to file
-File.WriteAllText("Test.ts", ts.ToString());
+// get generated code as string
+ts.ToString();
+
+// or write to file
+ts.Store("Test.ts");
 ```
 Sample C# class:
 ```cs
