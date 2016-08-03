@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using TypeScriptBuilder;
 
 namespace Test
@@ -10,7 +9,10 @@ namespace Test
         public static void Main(string[] args)
         {
             var
-                builder = new TypeScriptGenerator().ExcludeType(typeof(Program));
+                builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
+                {
+                    EmitComments = true
+                }).ExcludeType(typeof(Program));
 
             builder
                 .AddCSType(typeof(TestA.Employee))
