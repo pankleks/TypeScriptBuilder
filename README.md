@@ -83,6 +83,7 @@ export interface ITest {
 You can annotate your classes with below attributes to control generation:
 - `TSExclude` - skips generation of type or field
 - `TSAny` - skips type analysis, emits `any` instead
+- `TSMap` - can be used to rename generated type
 
 You can also exclude types without attributes, use method `ExcludeType`.
 
@@ -106,5 +107,6 @@ You can pass options `TypeScriptGenerator` constructor:
 - `UseCamelCase`: changes field names form `MyTestField` to `myTestField` (default true)
 - `EmitIinInterface`: adds I in interface names, `MySimpleData` becomes `IMySimpleData` (default true)
 - `EmitReadonly`: adds `readonly` to readonly fields, requires TypeScript 2.0 (default true)
+- `EmitComments`: adds comments with oryginal C# type description (default false)
 
 To learn more run `Test` project in the solution.
