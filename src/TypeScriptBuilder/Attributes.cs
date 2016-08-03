@@ -29,6 +29,7 @@ namespace TypeScriptBuilder
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum)]
     public class TSMap : Attribute
     {
         public readonly string Name;

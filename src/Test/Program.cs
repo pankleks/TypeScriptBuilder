@@ -22,13 +22,14 @@ namespace Test
 
 namespace TestA
 {
+    [TSMap("UserType")]
     public enum EmployeeType
     {
         Normal = 1,
         Temporary = 2
     }
 
-    [TSMap("Funky")]
+    [TSMap("FunkyEntity")]
     public class Entity<T>
     {
         public T Id;
@@ -53,11 +54,19 @@ namespace TestA
 
         public ICollection<Entity<DateTime>> CollectionTest;
 
+        public Stamp CreatedBy;
+
         // exclude
         [TSAny]
         public Skip Skip;
         [TSExclude]
         public int Skip2;
+    }
+
+    public struct Stamp
+    {
+        public short UserId;
+        public string User;
     }
 
     [TSExclude]

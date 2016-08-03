@@ -52,6 +52,9 @@ namespace TypeScriptBuilder
             if (ti.IsGenericParameter)
                 return type.Name;
 
+            var
+                map = type.GetTypeInfo().GetCustomAttribute<TSMap>(false);
+
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Byte:
@@ -61,7 +64,8 @@ namespace TypeScriptBuilder
                     if (ti.IsEnum)
                     {
                         AddCSType(type);
-                        return type.Name;
+
+                        return map == null ? type.Name : map.Name;
                     }
 
                     return "number";
@@ -80,9 +84,6 @@ namespace TypeScriptBuilder
 
                     if (type == typeof(object))
                         return "any";
-
-                    TSMap
-                        map;
 
                     if (ti.IsGenericType)
                     {
@@ -111,8 +112,6 @@ namespace TypeScriptBuilder
                     }
 
                     AddCSType(type);
-
-                    map = type.GetTypeInfo().GetCustomAttribute<TSMap>(false);
 
                     return NamespacePrefix(type) + NormalizeInterface(map == null ? type.Name : map.Name, forceClass);
                 default:
@@ -168,7 +167,7 @@ namespace TypeScriptBuilder
             var
                 baseType = ti.BaseType;
 
-            if (baseType != null && baseType != typeof(object))
+            if (ti.IsClass && baseType != null && baseType != typeof(object))
                 Builder.AppendLine($" extends {TypeName(baseType)}");
 
             Builder.OpenScope();
