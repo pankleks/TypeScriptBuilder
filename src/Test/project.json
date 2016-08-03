@@ -5,7 +5,7 @@
   },
 
   "dependencies": {
-    "TypeScriptBuilder": "0.1.6"  },
+    "TypeScriptBuilder": "0.1.7"  },
 
   "frameworks": {
     "netcoreapp1.0": {
