@@ -10,6 +10,7 @@ namespace TestA
 	export interface IEquipment
 	{
 		code: number;
+		objectDictionary: {};
 		id: number;
 		map1: TestB.IPair<number, IFunkyEntity<number>>;
 		map2: TestB.IPair<string, IFunkyEntity<string>>;

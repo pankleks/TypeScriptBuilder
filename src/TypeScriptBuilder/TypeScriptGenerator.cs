@@ -115,7 +115,7 @@ namespace TypeScriptBuilder
 
                     return NamespacePrefix(type) + NormalizeInterface(map == null ? type.Name : map.Name, forceClass);
                 default:
-                    return "any";
+                    return $"any /* {type.FullName} */";
             }
         }
 
@@ -146,6 +146,8 @@ namespace TypeScriptBuilder
                 return;
 
             SetNamespace(type);
+
+            Comment(type);
 
             if (ti.IsEnum)
             {
@@ -189,19 +191,19 @@ namespace TypeScriptBuilder
 
         void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, Func<T, bool> getReadonly, bool forceClass) where T : MemberInfo
         {
-            Type
-                fieldType;
-
             foreach (var f in fields)
             {
                 if (f.GetCustomAttribute<TSExclude>() == null)   // only fields defined in that type
                 {
                     var
-                        nullable = Nullable.GetUnderlyingType(getType(f));
+                        fieldType = getType(f);
+
+                    Comment(fieldType);
+
+                    var
+                        nullable = Nullable.GetUnderlyingType(fieldType);
                     if (nullable != null)
                         fieldType = getType(f).GetGenericArguments()[0];
-                    else
-                        fieldType = getType(f);
 
                     if (_options.EmitReadonly && getReadonly(f))
                         Builder.Append("readonly ");
@@ -219,6 +221,12 @@ namespace TypeScriptBuilder
                     Builder.AppendLine(";");
                 }
             }
+        }
+
+        public void Comment(Type type)
+        {
+            if (_options.EmitComments)
+                Builder.AppendLine($"// {type}");
         }
 
         public string NormalizeField(string name)
