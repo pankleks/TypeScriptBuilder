@@ -27,7 +27,7 @@ namespace Test
 namespace TestA
 {
     [TSMap("UserType")]
-    public enum EmployeeType
+    public enum EmployeeType : short
     {
         Normal = 1,
         Temporary = 2

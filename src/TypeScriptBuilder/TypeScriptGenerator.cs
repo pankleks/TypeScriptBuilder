@@ -155,7 +155,7 @@ namespace TypeScriptBuilder
                 Builder.OpenScope();
 
                 foreach (var e in Enum.GetValues(type))
-                    Builder.AppendLine($"{e} = {(int)e},");
+                    Builder.AppendLine($"{e} = {Convert.ToInt32(e)},");
 
                 Builder.CloseScope();
                 return;
