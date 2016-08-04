@@ -6,10 +6,7 @@ You can also wrtie small console app, to generate code by pre-build tools.
 
 <b>Works on Full & NET Core framework!</b>
 
-Install by nuget:
-```
-Install-Package TypeScriptBuilder
-```
+Install by nuget: `Install-Package TypeScriptBuilder`
 
 ## Supported features
 - Resolving type dependency
@@ -19,7 +16,7 @@ Install-Package TypeScriptBuilder
 - Enums
 - Nullable types
 - Dictionary converison (to strong type TS indexed objects)
-- Excluding types
+- Set of code generation control attributes
 - `any` for types that can't be converted
 
 ## Usage / Samples
@@ -80,17 +77,17 @@ export interface ITest {
 ```
 ## Control attributes
 
-You can annotate your code with below attributes to affect TS code generation.
+You can annotate code with below attributes to affect TS code generation.
 
 ### TSExclude
 Can be applied on classes, stucts or fields/properties - these items will be omited during TS code generation.
-You can also exclude types by using method `ExcludeType`.
+Note: You can also exclude types by using method `ExcludeType`.
 
 ### TSAny
 When applied on field/property it's type will be set to `any` and skips fruther type analizes.
 
 ### TSMap(name)
-Can be used on classes or structs to rename generated type:
+Can be used on class, struct or enum to rename generated type:
 ```cs
 [TSMap("Funky")]
 class MyCSharpClass
@@ -110,7 +107,7 @@ export interface Test {
 ```
 
 ### TSFlat
-If applied on class (B), all fields from base classes (A) are included in class (B):
+If applied on class (B), all fields from base classe (A) are included in class (B):
 ```cs
 class A
 {
@@ -125,8 +122,8 @@ class B : A
 ```
 ```ts
 export interface B {
-    Id: number;
-    Active: boolean;
+    Id: number;         // from A
+    Active: boolean;    // from A
     Name: string;
 }
 ```
