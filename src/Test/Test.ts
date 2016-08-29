@@ -16,7 +16,7 @@ namespace TestA
 	export interface IEquipment
 	{
 		// System.Int32
-		code: number;
+		code?: number;
 		// System.Collections.Generic.Dictionary`2[System.Double,System.String]
 		objectDictionary: {};
 		// System.Int16
@@ -34,7 +34,7 @@ namespace TestA
 		// System.String
 		login: string;
 		// System.Nullable`1[TestA.EmployeeType]
-		employeeType?: UserType;
+		employeeType: UserType;
 		// System.String[]
 		arrayTest: string[];
 		// System.Collections.Generic.List`1[System.DateTime]

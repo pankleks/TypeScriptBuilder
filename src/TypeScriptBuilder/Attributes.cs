@@ -43,4 +43,9 @@ namespace TypeScriptBuilder
     public class TSFlat : Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class TSOptional : Attribute
+    {
+    }
 }

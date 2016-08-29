@@ -48,6 +48,7 @@ namespace TestA
     [TSFlat]
     public class Equipment: Entity<short>
     {
+        [TSOptional]
         public int Code;
         public Dictionary<double, string> ObjectDictionary;
     }

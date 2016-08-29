@@ -202,14 +202,18 @@ namespace TypeScriptBuilder
 
                     var
                         nullable = Nullable.GetUnderlyingType(fieldType);
+
                     if (nullable != null)
                         fieldType = getType(f).GetGenericArguments()[0];
+
+                    var
+                        optional = f.GetCustomAttribute<TSOptional>() != null;
 
                     if (_options.EmitReadonly && getReadonly(f))
                         Builder.Append("readonly ");
 
                     Builder.Append(NormalizeField(f.Name));
-                    Builder.Append(nullable != null ? "?" : "");
+                    Builder.Append(optional ? "?" : "");
                     Builder.Append(": ");
                     Builder.Append(f.GetCustomAttribute<TSAny>() == null ? TypeName(fieldType) : "any");
 
