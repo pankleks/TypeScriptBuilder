@@ -140,7 +140,6 @@ namespace TypeScriptBuilder
 
         void GenerateTypeDefinition(Type type)
         {
-            Console.WriteLine("Generating " + type);
             var
                 ti = type.GetTypeInfo();
 
