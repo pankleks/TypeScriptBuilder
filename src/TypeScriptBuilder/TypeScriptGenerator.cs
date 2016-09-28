@@ -71,6 +71,7 @@ namespace TypeScriptBuilder
                     return "number";
                 case TypeCode.Decimal:
                 case TypeCode.Double:
+                case TypeCode.Single:
                     return "number";
                 case TypeCode.Boolean:
                     return "boolean";
