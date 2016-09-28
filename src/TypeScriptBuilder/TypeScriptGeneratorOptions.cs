@@ -6,5 +6,6 @@
         public bool EmitIinInterface = true; // use I in interface names: MyData -> IMyData
         public bool EmitReadonly = true;    // emits readonly for readonly fields (need TypeScript 2.0)
         public bool EmitComments = false;    // emits comments with oryginal C# type
+        public bool IgnoreNamespaces = false; // ignores namespace in emissions
     }
 }

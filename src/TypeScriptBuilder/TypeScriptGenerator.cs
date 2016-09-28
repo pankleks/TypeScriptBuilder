@@ -121,7 +121,7 @@ namespace TypeScriptBuilder
 
         string NamespacePrefix(Type type)
         {
-            return type.Namespace == _namespace ? "" : (type.Namespace + '.');
+            return type.Namespace == _namespace || _options.IgnoreNamespaces ? "" : (type.Namespace + '.');
         }
 
         string _namespace = "";
@@ -139,6 +139,7 @@ namespace TypeScriptBuilder
 
         void GenerateTypeDefinition(Type type)
         {
+            Console.WriteLine("Generating " + type);
             var
                 ti = type.GetTypeInfo();
 
@@ -259,12 +260,16 @@ namespace TypeScriptBuilder
 
             foreach (var e in _builder)
             {
-                builder.AppendLine($"namespace {e.Key}");
-                builder.OpenScope();
+                if (!_options.IgnoreNamespaces)
+                {
+                    builder.AppendLine($"namespace {e.Key}");
+                    builder.OpenScope();
+                }
 
                 builder.AppendLine(e.Value.ToString());
-
-                builder.CloseScope();
+                
+                if (!_options.IgnoreNamespaces)
+                    builder.CloseScope();
             }
 
             return builder.ToString();
