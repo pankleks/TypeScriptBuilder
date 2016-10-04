@@ -27,6 +27,10 @@ namespace TypeScriptBuilder
         {
             Body = body;
         }
+        public TSInitialize()
+        {
+            Body = null;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum)]

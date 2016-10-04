@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace TypeScriptBuilder
 {
@@ -181,11 +182,16 @@ namespace TypeScriptBuilder
             if (!flat)
                 flags |= BindingFlags.DeclaredOnly;
 
+            var staticFlags = BindingFlags.Static | BindingFlags.Public;
+
             // fields
             GenerateFields(type, type.GetFields(flags), f => f.FieldType, f => f.IsInitOnly, forceClass);
 
             // properties
             GenerateFields(type, type.GetProperties(flags), f => f.PropertyType, f => false, forceClass);
+
+            // static
+            GenerateFields(type, type.GetFields(staticFlags), f => f.FieldType, f => true, forceClass);
 
             Builder.CloseScope();
         }
@@ -221,10 +227,26 @@ namespace TypeScriptBuilder
                     var
                         init = f.GetCustomAttribute<TSInitialize>();
                     if (forceClass && init != null)
-                        Builder.Append($" = {init.Body}");
+                        Builder.Append($" = {GenerateBody(init, f)}");
 
                     Builder.AppendLine(";");
                 }
+            }
+        }
+
+        private string GenerateBody(TSInitialize attribute, MemberInfo info)
+        {
+            if (attribute.Body != null)
+                return attribute.Body;
+            if (info is FieldInfo)
+            {
+                FieldInfo field = info as FieldInfo;
+                return JsonConvert.SerializeObject(field.GetRawConstantValue());
+            }
+            else
+            {
+                PropertyInfo property = info as PropertyInfo;
+                return JsonConvert.SerializeObject(property.GetRawConstantValue());
             }
         }
 
