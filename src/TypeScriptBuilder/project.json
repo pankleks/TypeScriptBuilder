@@ -27,11 +27,5 @@
     },
     "net452": {
     }
-  },
-
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration %compile:Configuration%"
-    ]
   }
 }
