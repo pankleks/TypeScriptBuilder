@@ -14,12 +14,12 @@ namespace TypeScriptBuilder
     {
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct), Obsolete("experimental")]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class TSClass : Attribute
     {
     }
 
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property), Obsolete("experimental")]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class TSInitialize : Attribute
     {
         public readonly string Body;
