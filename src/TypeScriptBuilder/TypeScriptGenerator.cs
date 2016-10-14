@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace TypeScriptBuilder
 {
@@ -177,20 +178,35 @@ namespace TypeScriptBuilder
             Builder.OpenScope();
 
             var
-                flags = BindingFlags.Instance | BindingFlags.Public;
+                flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
             if (!flat)
                 flags |= BindingFlags.DeclaredOnly;
 
+            var staticFlags = BindingFlags.Static | BindingFlags.Public;
+
             // fields
-            GenerateFields(type, type.GetFields(flags), f => f.FieldType, f => f.IsInitOnly, forceClass);
+            GenerateFields(
+                type,
+                type.GetFields(flags),
+                f => f.FieldType,
+                f => f.IsInitOnly,
+                f => f.IsStatic,
+                forceClass);
 
             // properties
-            GenerateFields(type, type.GetProperties(flags), f => f.PropertyType, f => false, forceClass);
+            GenerateFields(
+                type,
+                type.GetProperties(flags),
+                f => f.PropertyType,
+                f => false,
+                f => f.GetGetMethod().IsStatic,
+                forceClass
+            );
 
             Builder.CloseScope();
         }
 
-        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, Func<T, bool> getReadonly, bool forceClass) where T : MemberInfo
+        void GenerateFields<T>(Type type, T[] fields, Func<T, Type> getType, Func<T, bool> getReadonly, Func<T, bool> getStatic, bool forceClass) where T : MemberInfo
         {
             foreach (var f in fields)
             {
@@ -210,6 +226,9 @@ namespace TypeScriptBuilder
                     var
                         optional = f.GetCustomAttribute<TSOptional>() != null;
 
+                    if (getStatic(f))
+                        Builder.Append("static ");
+
                     if (_options.EmitReadonly && getReadonly(f))
                         Builder.Append("readonly ");
 
@@ -221,10 +240,26 @@ namespace TypeScriptBuilder
                     var
                         init = f.GetCustomAttribute<TSInitialize>();
                     if (forceClass && init != null)
-                        Builder.Append($" = {init.Body}");
+                        Builder.Append($" = {GenerateBody(init, f)}");
 
                     Builder.AppendLine(";");
                 }
+            }
+        }
+
+        private string GenerateBody(TSInitialize attribute, MemberInfo info)
+        {
+            if (attribute.Body != null)
+                return attribute.Body;
+            if (info is FieldInfo)
+            {
+                FieldInfo field = info as FieldInfo;
+                return JsonConvert.SerializeObject(field.GetRawConstantValue());
+            }
+            else
+            {
+                PropertyInfo property = info as PropertyInfo;
+                return JsonConvert.SerializeObject(property.GetRawConstantValue());
             }
         }
 
