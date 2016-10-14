@@ -182,8 +182,6 @@ namespace TypeScriptBuilder
             if (!flat)
                 flags |= BindingFlags.DeclaredOnly;
 
-            var staticFlags = BindingFlags.Static | BindingFlags.Public;
-
             // fields
             GenerateFields(
                 type,
