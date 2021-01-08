@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TestA;
 using TypeScriptBuilder;
 
 namespace Test
@@ -8,16 +9,17 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            var
-                builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
-                {
-                    EmitComments = true
-                }).ExcludeType(typeof(Program));
+            var builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
+            {
+                EmitComments = true
+            });
 
             builder
-                .AddCSType(typeof(TestA.Employee))
-                .AddCSType(typeof(TestA.Equipment))
-                .AddCSType(typeof(TestB.Strange<>));
+                .ExcludeType(typeof(Program))
+                .AddCSType(typeof(Poco));
+                //.AddCSType(typeof(TestA.Employee));
+                //.AddCSType(typeof(TestA.Equipment))
+                //.AddCSType(typeof(TestB.Strange<>));
 
             builder.Store("Test.ts");
         }
@@ -26,6 +28,20 @@ namespace Test
 
 namespace TestA
 {
+
+    /// <summary>
+    /// A Poco or Plain Old Csharp Object
+    /// </summary>
+    public class Poco
+    {
+        /// <summary>
+        /// Unique key for the member
+        /// </summary>
+        public Guid Key { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+    
     [TSMap("UserType")]
     public enum EmployeeType : short
     {
@@ -55,6 +71,7 @@ namespace TestA
 
     public class Employee : Entity<int>
     {
+        public Guid Key;
         public string Login;
         public EmployeeType? EmployeeType;
 

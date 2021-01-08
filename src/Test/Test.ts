@@ -1,8 +1,19 @@
 namespace TestA
 {
+	
+    /** A Poco or Plain Old Csharp Object */
+    export interface IPoco
+    {
+        /** Unique key for the member */
+        key: string;
+        name: string;
+        age: number;
+    }
+	
 	// TestA.Entity`1[T]
 	export interface IFunkyEntity<T>
 	{
+		
 		// T
 		id: T;
 		// TestB.Pair`2[System.Int32,TestA.Entity`1[System.Int32]]
@@ -31,6 +42,8 @@ namespace TestA
 	// TestA.Employee
 	export interface IEmployee extends IFunkyEntity<number>
 	{
+		// System.Guid
+		key: string;
 		// System.String
 		login: string;
 		// System.Nullable`1[TestA.EmployeeType]

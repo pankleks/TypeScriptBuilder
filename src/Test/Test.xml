@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Test</name>
+    </assembly>
+    <members>
+        <member name="T:TestA.Poco">
+            <summary>
+            A Poco or Plain Old Csharp Object
+            </summary>
+        </member>
+        <member name="P:TestA.Poco.Key">
+            <summary>
+            Unique key for the member
+            </summary>
+        </member>
+    </members>
+</doc>
