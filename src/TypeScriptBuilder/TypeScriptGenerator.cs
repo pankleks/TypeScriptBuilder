@@ -213,22 +213,43 @@ namespace TypeScriptBuilder
             {
                 if (f.GetCustomAttribute<TSExclude>() == null)   // only fields defined in that type
                 {
-                    var
-                        fieldType = getType(f);
+                    var fieldType = getType(f);
 
 
                     CommentMember(fieldType, f);
 
-                    
-                    
-                    var
-                        nullable = Nullable.GetUnderlyingType(fieldType);
+                    var nullable = Nullable.GetUnderlyingType(fieldType);
 
                     if (nullable != null)
                         fieldType = getType(f).GetGenericArguments()[0];
 
-                    var
-                        optional = f.GetCustomAttribute<TSOptional>() != null;
+                    var optional = f.GetCustomAttribute<TSOptional>() != null;
+                    
+                    // If not the attribute was used, check if the type is nullable
+                    if (!optional)
+                    {
+                        // Needs to fetch the Type from the PropertyInfo or FieldInfo-objects, for some resone
+                        // the fieldType-variable does not contain this info.
+                        Type realType = null;
+                        if (f is PropertyInfo pInfo)
+                        {
+                            realType = pInfo.PropertyType;
+                        }
+                        else if (f is FieldInfo fInfo)
+                        {
+                            realType = fInfo.FieldType;
+                        }
+
+                        if (realType != null)
+                        {
+                            if (realType.IsGenericType && realType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                            {
+                                optional = true;
+                            }
+                        }
+                      
+                    }
+                    
 
                     if (getStatic(f))
                         Builder.Append("static ");
