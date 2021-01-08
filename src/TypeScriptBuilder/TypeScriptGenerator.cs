@@ -297,11 +297,11 @@ namespace TypeScriptBuilder
             {
                 Builder.AppendLine($"/** {commentText} ({type}) */");
             }
-            else if (_options.EmitComments)
+            else if (_options.EmitComments && !string.IsNullOrEmpty(type))
             {
                 Builder.AppendLine($"/** {type} */");
             }
-            else if (_options.EmitDocumentation)
+            else if (_options.EmitDocumentation && !string.IsNullOrEmpty(commentText))
             {
                 Builder.AppendLine($"/** {commentText} */");
             }
