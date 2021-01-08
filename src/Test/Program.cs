@@ -11,6 +11,7 @@ namespace Test
         {
             var builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
             {
+                EmitDocumentation = false,
                 EmitComments = true
             });
 
@@ -40,6 +41,9 @@ namespace TestA
         public Guid Key { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
+        
+        public DateTime? BirthDate { get; set; }
+        
     }
     
     [TSMap("UserType")]
