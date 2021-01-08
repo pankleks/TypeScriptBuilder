@@ -31,6 +31,8 @@ namespace TestA
 	// TestA.Employee
 	export interface IEmployee extends IFunkyEntity<number>
 	{
+		// System.Guid
+		key: string;
 		// System.String
 		login: string;
 		// System.Nullable`1[TestA.EmployeeType]

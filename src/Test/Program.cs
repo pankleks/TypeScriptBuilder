@@ -55,6 +55,7 @@ namespace TestA
 
     public class Employee : Entity<int>
     {
+        public Guid Key;
         public string Login;
         public EmployeeType? EmployeeType;
 

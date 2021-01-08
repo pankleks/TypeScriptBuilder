@@ -84,6 +84,9 @@ namespace TypeScriptBuilder
                     if (type.IsArray)
                         return TypeName(type.GetElementType()) + "[]";
 
+                    if (type == typeof(Guid))
+                        return "string";
+                    
                     if (type == typeof(object))
                         return "any";
 
