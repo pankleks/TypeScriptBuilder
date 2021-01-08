@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TestA;
 using TypeScriptBuilder;
 
 namespace Test
@@ -14,10 +15,11 @@ namespace Test
             });
 
             builder
-                .ExcludeType(typeof(Program))  
-                .AddCSType(typeof(TestA.Employee))
-                .AddCSType(typeof(TestA.Equipment))
-                .AddCSType(typeof(TestB.Strange<>));
+                .ExcludeType(typeof(Program))
+                .AddCSType(typeof(Poco));
+                //.AddCSType(typeof(TestA.Employee));
+                //.AddCSType(typeof(TestA.Equipment))
+                //.AddCSType(typeof(TestB.Strange<>));
 
             builder.Store("Test.ts");
         }
@@ -26,6 +28,20 @@ namespace Test
 
 namespace TestA
 {
+
+    /// <summary>
+    /// A Poco or Plain Old Csharp Object
+    /// </summary>
+    public class Poco
+    {
+        /// <summary>
+        /// Unique key for the member
+        /// </summary>
+        public Guid Key { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+    
     [TSMap("UserType")]
     public enum EmployeeType : short
     {

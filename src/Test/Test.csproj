@@ -5,6 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\Html\Tips Och Tricks\TypeScript\TypeScriptBuilder\src\Test\Test.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\TypeScriptBuilder\TypeScriptBuilder.csproj" />
   </ItemGroup>

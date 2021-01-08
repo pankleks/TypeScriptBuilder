@@ -152,7 +152,7 @@ namespace TypeScriptBuilder
 
             SetNamespace(type);
 
-            Comment(type);
+            CommentClass(type);
 
             if (ti.IsEnum)
             {
@@ -216,8 +216,11 @@ namespace TypeScriptBuilder
                     var
                         fieldType = getType(f);
 
-                    Comment(fieldType);
 
+                    CommentMember(fieldType, f);
+
+                    
+                    
                     var
                         nullable = Nullable.GetUnderlyingType(fieldType);
 
@@ -264,12 +267,48 @@ namespace TypeScriptBuilder
             }
         }
 
-        public void Comment(Type type)
+        private void CommentClass(Type type)
         {
-            if (_options.EmitComments)
-                Builder.AppendLine($"// {type}");
+            var summery = "";
+            
+            if (_options.EmitDocumentation)
+            {
+                summery = type.GetSummary();
+            }
+            
+            AppendComment(summery,type.ToString());
+            
         }
 
+        private void CommentMember<T>(Type type, T memberInfo) where T : MemberInfo
+        {
+            var methodSummary = "";
+            if (_options.EmitDocumentation)
+            {
+                methodSummary = memberInfo.GetSummary();
+            }
+            
+            AppendComment(methodSummary,type.ToString());
+        }
+
+        private void AppendComment(string commentText, string type)
+        {
+            if(_options.EmitComments && _options.EmitDocumentation)
+            {
+                Builder.AppendLine($"/** {commentText} ({type}) */");
+            }
+            else if (_options.EmitComments)
+            {
+                Builder.AppendLine($"/** {type} */");
+            }
+            else if (_options.EmitDocumentation)
+            {
+                Builder.AppendLine($"/** {commentText} */");
+            }
+
+        }
+        
+        
         public string NormalizeField(string name)
         {
             if (!_options.UseCamelCase)
