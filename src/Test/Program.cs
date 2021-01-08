@@ -8,13 +8,13 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            var
-                builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
-                {
-                    EmitComments = true
-                }).ExcludeType(typeof(Program));
+            var builder = new TypeScriptGenerator(new TypeScriptGeneratorOptions
+            {
+                EmitComments = true
+            });
 
             builder
+                .ExcludeType(typeof(Program))  
                 .AddCSType(typeof(TestA.Employee))
                 .AddCSType(typeof(TestA.Equipment))
                 .AddCSType(typeof(TestB.Strange<>));
