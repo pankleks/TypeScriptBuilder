@@ -351,8 +351,9 @@ namespace TypeScriptBuilder
             while (_toDefine.Count > 0)
                 GenerateTypeDefinition(_toDefine.Pop());
 
-            var
-                builder = new CodeTextBuilder();
+            var builder = new CodeTextBuilder();
+
+            builder.AppendLine("// NOTE: This file is auto-generated. Any changes will be overwritten.");
 
             foreach (var e in _builder)
             {
