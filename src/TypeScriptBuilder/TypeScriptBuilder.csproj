@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>TypeScriptBuilder</PackageId>
+    <Company>TypeScriptBuilder</Company>
+    <Product>TypeScriptBuilder</Product>
+    <Authors>TypeScriptBuilder</Authors>
   </PropertyGroup>
 
   <ItemGroup>
