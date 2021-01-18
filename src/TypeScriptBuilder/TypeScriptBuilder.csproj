@@ -1,7 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>TypeScriptBuilder</PackageId>
+    <Company>TypeScriptBuilder</Company>
+    <Product>TypeScriptBuilder</Product>
+    <Authors>TypeScriptBuilder</Authors>
+    <Description>TypeScript builder for C#</Description>
   </PropertyGroup>
 
   <ItemGroup>
